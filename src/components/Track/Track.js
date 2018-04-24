@@ -3,28 +3,22 @@ import { TrackInformation } from '../TrackInformation/TrackInformation';
 import { TrackAction } from '../TrackAction/TrackAction';
 import './Track.css';
 
-export const Track = (props) => {
-    return (
-        <div className='Track'>
-            <TrackInformation title={props.title} artist={props.artist} album={props.album} />
-            <TrackAction action={props.action} />
-        </div>
-    );
-};
-
-/*
 export class Track extends React.Component {
     constructor(props) {
         super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(event) {
+        this.props.onAction(this.props.index);
     }
 
     render() {
         return (
             <div className='Track'>
                 <TrackInformation title={this.props.title} artist={this.props.artist} album={this.props.album} />
-                <TrackAction action={this.props.action} />
+                <TrackAction action={this.props.action} onClick={this.handleClick} />
             </div>
         );
     }
 }
-*/
