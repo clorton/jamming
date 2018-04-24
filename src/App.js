@@ -5,6 +5,11 @@ import { SearchBar } from './components/SearchBar/SearchBar';
 import { TrackList } from './components/TrackList/TrackList';
 import { Button } from './components/Button/Button';
 
+import { Spotify } from './spotify/Spotify';
+
+// console.log(Spotify);
+// Spotify.getToken();
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +39,7 @@ class App extends Component {
   }
 
   search(term) {
-    console.log("Searching Spotify for '" + term + "'");
+    Spotify.search(term).then(results => this.setState({ search_results: results }));
   }
 
   handleAddTrack(index) {
@@ -56,7 +61,7 @@ class App extends Component {
   }
 
   handleSave(event) {
-    console.log("Saving playlist '" + this.state.playlist_name + "' to Spotify");
+    Spotify.save(this.state.playlist_name, this.state.playlist);
   }
 
   render() {
