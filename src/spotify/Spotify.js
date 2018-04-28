@@ -48,7 +48,7 @@ export const Spotify = {
         let url = searchUrl + encodeURIComponent(term) + '&type=track&market=US';
         console.log('URL: "' + url + '"');
 
-        let results = await fetch(url, { Headers: headers })
+        let results = await fetch(url, { headers: headers })
         .then(response => {
             if (response.ok) {
                 return response.json();
@@ -76,7 +76,7 @@ export const Spotify = {
                 // POST playlist tracks
                 const userIdUrl = 'https://api.spotify.com/v1/me';
                 console.log('Getting current user ID...');
-                fetch(userIdUrl, { Headers: headers })
+                fetch(userIdUrl, { headers: headers })
                 .then(response => {
                     return response.json();
                 })
@@ -84,11 +84,7 @@ export const Spotify = {
                     const userId = jsonResponse.id;
                     const playlistUrl = 'https://api.spotify.com/v1/users/' + userId + '/playlists';
                     console.log('GET: "' + playlistUrl + '"');
-                    fetch(playlistUrl, { Headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + accessToken
-                    }})
+                    fetch(playlistUrl, { headers: headers })
                     .then(response => {
                         return response.json();
                     })
@@ -99,7 +95,7 @@ export const Spotify = {
                         console.log('POST: "' + tracksUrl + '"');
                         fetch(tracksUrl, {
                             method: 'POST',
-                            Headers: headers
+                            headers: headers
                         })
                         .then(response => {
                             return response.json();
