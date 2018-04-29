@@ -9,20 +9,3 @@ export const TrackInformation = (props) => {
         </div>
     );
 };
-
-/*
-export class TrackInformation extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-        return (
-            <div className='Track-information'>
-                <h3>{this.props.title}</h3>
-                <p>{this.props.artist} | {this.props.album}</p>
-            </div>
-        );
-    }
-}
-*/

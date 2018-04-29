@@ -7,28 +7,24 @@ import { Button } from './components/Button/Button';
 
 import { Spotify } from './spotify/Spotify';
 
-// console.log(Spotify);
-// Spotify.getToken();
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       search_term: '',
       search_results: [
-        { title: 'Tiny Dancer', artist: 'Elton John', album: 'Madman Across The Water' },
-        { title: 'Tiny Dancer', artist: 'Tim McGraw', album: 'Love Story' },
-        { title: 'Tiny Dancer', artist: 'Rockabye Baby!', album: 'Lullaby Renditions of Elton John' },
-        { title: 'Tiny Dancer', artist: 'The White Raven', album: 'Tiny Dancer' },
-        { title: 'Tiny Dancer - Live Album Version', artist: 'Ben Folds', album: 'Ben Folds Live' },
-        { title: 'Testing', artist: 'Christopher Lorton', album: "Mowin' the Moss" }
+        { title: 'Tiny Dancer', artist: 'Elton John', album: 'Madman Across The Water', uri: 'spotify:track:2TVxnKdb3tqe1nhQWwwZCO' },
+        { title: 'Tiny Dancer', artist: 'Tim McGraw', album: 'Love Story', uri: 'spotify:track:7uQG1fOTqbvo3SYOnqm8hj' },
+        { title: 'Tiny Dancer', artist: 'Rockabye Baby!', album: 'Lullaby Renditions of Elton John', uri: 'spotify:track:4nGshLvYystwed45UxVWdu' },
+        { title: 'Tiny Dancer', artist: 'The White Raven', album: 'Tiny Dancer', uri: 'spotify:track:2JkYFFr4G4eIDRa7zWmvjT' },
+        { title: 'Tiny Dancer - Live Album Version', artist: 'Ben Folds', album: 'Ben Folds Live', uri: 'spotify:track:6QMujKWzo7QpC39f7M9tzV' },
       ],
       playlist_name: 'New Playlist',
       playlist: [
-        { title: 'Stronger',     artist: 'Britney Spears',  album: 'Oops!... I Did It Again' },
-        { title: 'So Emotional', artist: 'Whitney Houston', album: 'Whitney' },
-        { title: "It's Not Right But It's Okay", artist: 'Whitney Houston', album: 'My Love Is Your Love' },
-        { title: 'China Cat Sunflower', artist: 'Grateful Dead', album: 'Rockband' }
+        { title: 'Stronger',     artist: 'Britney Spears',  album: 'Oops!... I Did It Again', uri: 'spotify:track:5QhBKPqsnX1uY9fZNaAtZg' },
+        { title: 'So Emotional', artist: 'Whitney Houston', album: 'Whitney', uri: 'spotify:track:4l2Edgdj4vla02GCh7YyAv' },
+        { title: "It's Not Right But It's Okay", artist: 'Whitney Houston', album: 'My Love Is Your Love', uri: 'spotify:track:7861kBrZ5aw7o4NfggcyYW' },
+        { title: 'China Cat Sunflower - Live in Paris 1972 Version', artist: 'Grateful Dead', album: "Europe '72 [Live] [Expanded]", uri: 'spotify:track:3K80eTMvPE8oG1aWXi4gDA' }
       ]
     };
     this.search = this.search.bind(this);

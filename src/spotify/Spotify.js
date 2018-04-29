@@ -22,10 +22,8 @@ function getToken() {
             for (var pair of headers.entries()) {
                 console.log(pair[0]+ ': '+ pair[1]);
              }
-            // window.location.replace(redirectUri);
         }
         else {
-            // Send user to Spotify
             const prefix = 'https://accounts.spotify.com/authorize?';
             const url = prefix
                 + 'client_id=' + clientId
@@ -52,58 +50,80 @@ export const Spotify = {
         .then(response => {
             if (response.ok) {
                 return response.json();
-            }
-            else {
+            } else {
                 console.log(response);
                 throw new Error('response not ok');
             }
-        }).then(jsonResponse => jsonResponse.tracks.items.map(item => {
-            return {
-                title: item.name,
-                artist: item.artists[0].name,
-                album: item.album.name,
-                uri: item.uri
-            };
-        }));
+        }).then(jsonResponse => {
+            console.log(jsonResponse);
+            return jsonResponse.tracks.items.map(item => {
+                return {
+                    title: item.name,
+                    artist: item.artists[0].name,
+                    album: item.album.name,
+                    uri: item.uri
+                };
+            })
+        });
         return results;
     },
+
     save(title, tracks) {
+        let userId;
+        getToken();
         if (title) {
             if (tracks && tracks.length) {
                 console.log("Saving tracks to playlist '" + title + "'.");
                 // GET current user id
-                // POST new playlist
-                // POST playlist tracks
+                // POST new playlist name
+                // POST playlist track uris
                 const userIdUrl = 'https://api.spotify.com/v1/me';
-                console.log('Getting current user ID...');
+                console.log('Getting current user ID...: ' + userIdUrl);
                 fetch(userIdUrl, { headers: headers })
                 .then(response => {
-                    return response.json();
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        console.log(response);
+                        throw new Error('response not ok');
+                    }
                 })
                 .then(jsonResponse => {
-                    const userId = jsonResponse.id;
+                    console.log(jsonResponse);
+                    userId = jsonResponse.id;
                     const playlistUrl = 'https://api.spotify.com/v1/users/' + userId + '/playlists';
-                    console.log('GET: "' + playlistUrl + '"');
-                    fetch(playlistUrl, { headers: headers })
-                    .then(response => {
+                    console.log('POST: "' + playlistUrl + '"');
+                    return fetch(playlistUrl, { method: 'POST', headers: headers, body: JSON.stringify({ name: title }) });
+                })
+                .then(response => {
+                    if (response.ok) {
                         return response.json();
-                    })
-                    .then(jsonResponse => {
-                        const playlistId = jsonResponse.id;
-                        const trackUris = encodeURIComponent(tracks.map(track => track.uri).join(','));
-                        const tracksUrl = 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks?uris=' + trackUris;
-                        console.log('POST: "' + tracksUrl + '"');
-                        fetch(tracksUrl, {
-                            method: 'POST',
-                            headers: headers
-                        })
-                        .then(response => {
-                            return response.json();
-                        })
-                        .then(jsonResponse => {
-                            console.log(jsonResponse);
-                        })
+                    } else {
+                        console.log(response);
+                        throw new Error('response not ok');
+                    }
+                })
+                .then(jsonResponse => {
+                    console.log(jsonResponse);
+                    const playlistId = jsonResponse.id;
+                    const trackUris = encodeURIComponent(tracks.map(track => track.uri).join(','));
+                    const tracksUrl = 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks?uris=' + trackUris;
+                    console.log('POST: "' + tracksUrl + '"');
+                    return fetch(tracksUrl, {
+                        method: 'POST',
+                        headers: headers
                     });
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        console.log(response);
+                        throw new Error('response not ok');
+                    }
+                })
+                .then(jsonResponse => {
+                    console.log(jsonResponse);
                 });
             }
             else {
@@ -115,17 +135,3 @@ export const Spotify = {
         }
     }
 };
-
-/*
-
-curl -X "POST" "https://api.spotify.com/v1/users/clorton/playlists"
---data "{\"name\":\"New Playlist\",\"description\":\"New playlist description\",\"public\":false}"
--H "Accept: application/json"
--H "Content-Type: application/json"
--H "Authorization: Bearer BQClmppgbiF-D_j4J5pnAYxx-I_wSWkzEwVfzyQfBw4806-5QOjkzPN0K_jv1rZ-jBevjHH73cZD_0_UoTU0zP3CsRLJX_nuUWAl69TKHrSRQjdS3dcTYkJss9RBzyphMbBH97p6YXjDV9B7puU0PJaJNcgw7rfb0bqFKbNLyvTPPuQUYqSIOoV9fJ-WUnv71FapTH7c5qeTKv0ipVUofl9oEogY"
-
-curl -X "POST" "https://api.spotify.com/v1/users/user_id/playlists/playlist_id/tracks?uris=track1_uri%2Ctrack2_uri%2Ctrack3_uri%2C...%2Ctrackn_uri"
--H "Accept: application/json"
--H "Content-Type: application/json"
--H "Authorization: Bearer BQClmppgbiF-D_j4J5pnAYxx-I_wSWkzEwVfzyQfBw4806-5QOjkzPN0K_jv1rZ-jBevjHH73cZD_0_UoTU0zP3CsRLJX_nuUWAl69TKHrSRQjdS3dcTYkJss9RBzyphMbBH97p6YXjDV9B7puU0PJaJNcgw7rfb0bqFKbNLyvTPPuQUYqSIOoV9fJ-WUnv71FapTH7c5qeTKv0ipVUofl9oEogY"
-*/
