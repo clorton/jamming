@@ -13,52 +13,47 @@ class App extends Component {
     this.state = {
       search_term: '',
       search_results: [
-        { title: 'Tiny Dancer', artist: 'Elton John', album: 'Madman Across The Water', uri: 'spotify:track:2TVxnKdb3tqe1nhQWwwZCO' },
-        { title: 'Tiny Dancer', artist: 'Tim McGraw', album: 'Love Story', uri: 'spotify:track:7uQG1fOTqbvo3SYOnqm8hj' },
-        { title: 'Tiny Dancer', artist: 'Rockabye Baby!', album: 'Lullaby Renditions of Elton John', uri: 'spotify:track:4nGshLvYystwed45UxVWdu' },
-        { title: 'Tiny Dancer', artist: 'The White Raven', album: 'Tiny Dancer', uri: 'spotify:track:2JkYFFr4G4eIDRa7zWmvjT' },
-        { title: 'Tiny Dancer - Live Album Version', artist: 'Ben Folds', album: 'Ben Folds Live', uri: 'spotify:track:6QMujKWzo7QpC39f7M9tzV' },
+        { title: 'Tiny Dancer',                      artist: 'Elton John',      album: 'Madman Across The Water',          uri: 'spotify:track:2TVxnKdb3tqe1nhQWwwZCO' },
+        { title: 'Tiny Dancer',                      artist: 'Tim McGraw',      album: 'Love Story',                       uri: 'spotify:track:7uQG1fOTqbvo3SYOnqm8hj' },
+        { title: 'Tiny Dancer',                      artist: 'Rockabye Baby!',  album: 'Lullaby Renditions of Elton John', uri: 'spotify:track:4nGshLvYystwed45UxVWdu' },
+        { title: 'Tiny Dancer',                      artist: 'The White Raven', album: 'Tiny Dancer',                      uri: 'spotify:track:2JkYFFr4G4eIDRa7zWmvjT' },
+        { title: 'Tiny Dancer - Live Album Version', artist: 'Ben Folds',       album: 'Ben Folds Live',                   uri: 'spotify:track:6QMujKWzo7QpC39f7M9tzV' },
       ],
       playlist_name: 'New Playlist',
       playlist: [
-        { title: 'Stronger',     artist: 'Britney Spears',  album: 'Oops!... I Did It Again', uri: 'spotify:track:5QhBKPqsnX1uY9fZNaAtZg' },
-        { title: 'So Emotional', artist: 'Whitney Houston', album: 'Whitney', uri: 'spotify:track:4l2Edgdj4vla02GCh7YyAv' },
-        { title: "It's Not Right But It's Okay", artist: 'Whitney Houston', album: 'My Love Is Your Love', uri: 'spotify:track:7861kBrZ5aw7o4NfggcyYW' },
-        { title: 'China Cat Sunflower - Live in Paris 1972 Version', artist: 'Grateful Dead', album: "Europe '72 [Live] [Expanded]", uri: 'spotify:track:3K80eTMvPE8oG1aWXi4gDA' }
+        { title: 'Stronger',                                         artist: 'Britney Spears',  album: 'Oops!... I Did It Again',      uri: 'spotify:track:5QhBKPqsnX1uY9fZNaAtZg' },
+        { title: 'So Emotional',                                     artist: 'Whitney Houston', album: 'Whitney',                      uri: 'spotify:track:4l2Edgdj4vla02GCh7YyAv' },
+        { title: "It's Not Right But It's Okay",                     artist: 'Whitney Houston', album: 'My Love Is Your Love',         uri: 'spotify:track:7861kBrZ5aw7o4NfggcyYW' },
+        { title: 'China Cat Sunflower - Live in Paris 1972 Version', artist: 'Grateful Dead',   album: "Europe '72 [Live] [Expanded]", uri: 'spotify:track:3K80eTMvPE8oG1aWXi4gDA' }
       ]
     };
-    this.search = this.search.bind(this);
-    this.handleAddTrack = this.handleAddTrack.bind(this);
-    this.handleRemoveTrack = this.handleRemoveTrack.bind(this);
-    this.handleInput = this.handleInput.bind(this);
-    this.handleSave = this.handleSave.bind(this);
   }
 
-  search(term) {
-    Spotify.search(term).then(results => this.setState({ search_results: results }));
-  }
+  search = (term) => {
+    Spotify.search(term).then(results => { if (results) { this.setState({ search_results: results })}});
+  };
 
-  handleAddTrack(index) {
+  handleAddTrack = (index) => {
     console.log('Adding track ' + index + ' to playlist.');
     let playlist = this.state.playlist;
     playlist.push(this.state.search_results[index]);
     this.setState({ playlist: playlist });
-  }
+  };
 
-  handleRemoveTrack(index) {
+  handleRemoveTrack = (index) => {
     console.log('Removing track ' + index + ' from playlist.');
     let playlist = this.state.playlist;
     playlist.splice(index, 1);
     this.setState({ playlist: playlist });
-  }
+  };
 
-  handleInput(event) {
+  handleInput = (event) => {
     this.setState({ playlist_name: event.target.value });
-  }
+  };
 
-  handleSave(event) {
+  handleSave = (event) => {
     Spotify.save(this.state.playlist_name, this.state.playlist);
-  }
+  };
 
   render() {
     return (
@@ -77,7 +72,7 @@ class App extends Component {
         </div>
       </div>
       );
-  }
+  };
 }
 
 export default App;

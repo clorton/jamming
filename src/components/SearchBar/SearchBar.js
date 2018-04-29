@@ -21,7 +21,7 @@ export class SearchBar extends React.Component {
     render() {
         return (
             <div className='SearchBar'>
-                <input placeholder='Enter A Song Title' onChange={this.handleChange} />
+                <input placeholder='Enter A Song Title' onChange={this.handleChange} onKeyPress={(e) => { if (e.key === 'Enter') this.handleSearch(); }} />
                 <Button handleClick={this.handleSearch} text='SEARCH' />
             </div>
         );

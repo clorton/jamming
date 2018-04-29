@@ -41,30 +41,34 @@ function getToken() {
 
 export const Spotify = {
     async search(term) {
-        getToken();
-        console.log("Searching for '" + term + "'.");
-        let url = searchUrl + encodeURIComponent(term) + '&type=track&market=US';
-        console.log('URL: "' + url + '"');
+        let results = null;
+        if (term) {
+            getToken();
+            console.log("Searching for '" + term + "'.");
+            let url = searchUrl + encodeURIComponent(term) + '&type=track&market=US';
+            console.log('URL: "' + url + '"');
 
-        let results = await fetch(url, { headers: headers })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.log(response);
-                throw new Error('response not ok');
-            }
-        }).then(jsonResponse => {
-            console.log(jsonResponse);
-            return jsonResponse.tracks.items.map(item => {
-                return {
-                    title: item.name,
-                    artist: item.artists[0].name,
-                    album: item.album.name,
-                    uri: item.uri
-                };
-            })
-        });
+            results = await fetch(url, { headers: headers })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    console.log(response);
+                    throw new Error('response not ok');
+                }
+            }).then(jsonResponse => {
+                console.log(jsonResponse);
+                return jsonResponse.tracks.items.map(item => {
+                    return {
+                        title: item.name,
+                        artist: item.artists[0].name,
+                        album: item.album.name,
+                        uri: item.uri
+                    };
+                })
+            });
+        }
+
         return results;
     },
 
