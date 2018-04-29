@@ -55,14 +55,21 @@ class App extends Component {
     Spotify.save(this.state.playlist_name, this.state.playlist);
   };
 
+  filterTracks = () => {
+    const playlistUris = this.state.playlist.map(track => track.uri);
+    let results = this.state.search_results.filter(track => !playlistUris.includes(track.uri) );
+    return results;
+  };
+
   render() {
+    let searchTracks = this.filterTracks();
     return (
       <div className="App">
         <SearchBar onSearch={this.search}/>
         <div className="App-playlist">
           <div className="SearchResults">
             <h2>Results</h2>
-            <TrackList tracks={this.state.search_results} action='+' onAction={this.handleAddTrack} />
+            <TrackList tracks={searchTracks} action='+' onAction={this.handleAddTrack} />
           </div>
           <div className="Playlist">
             <input type='text' value={this.state.playlist_name} onChange={this.handleInput} />
