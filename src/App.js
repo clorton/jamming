@@ -27,6 +27,22 @@ class App extends Component {
         { title: 'China Cat Sunflower - Live in Paris 1972 Version', artist: 'Grateful Dead',   album: "Europe '72 [Live] [Expanded]", uri: 'spotify:track:3K80eTMvPE8oG1aWXi4gDA' }
       ]
     };
+
+    // See if we have an authorization token
+    if (!Spotify.getToken()) {
+      // If no token, check current URL for authorization token
+      const currentUrl = window.location.href;
+      const pattern = '#access_token=';
+      const match = currentUrl.match(pattern);
+      if (match) {
+        const accessToken = currentUrl.match(/access_token=([^&]*)/)[1];
+        console.log('Access token in URL was "' + accessToken + '".');
+        Spotify.setToken(accessToken);
+      } else {
+        // No token in URL, ask Spotify for an authorization token
+        Spotify.authorize();
+      }
+    }
   }
 
   search = (term) => {

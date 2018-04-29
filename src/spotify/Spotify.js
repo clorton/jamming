@@ -1,49 +1,37 @@
 const clientId = '65e06a70acc44809ac58635c2e9eb624';
 const redirectUri = 'http://localhost:3000/';
 const scopes = 'user-read-private user-read-birthdate user-read-email playlist-modify-public playlist-modify-private';
-let accessToken;
-let headers;
+let accessToken = null;
+let headers = null;
 const searchUrl = 'https://api.spotify.com/v1/search?q=';
 
-function getToken() {
-    if (!accessToken) {
-        const currentUrl = window.location.href;
-        const pattern = '#access_token=';
-        const match = currentUrl.match(pattern);
-        if (match) {
-            accessToken = currentUrl.match(/access_token=([^&]*)/)[1];
-            console.log('Access token in URL was "' + accessToken + '".');
-            headers = new Headers({
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + accessToken
-            });
-            console.log('Headers are ');
-            for (var pair of headers.entries()) {
-                console.log(pair[0]+ ': '+ pair[1]);
-             }
-        }
-        else {
-            const prefix = 'https://accounts.spotify.com/authorize?';
-            const url = prefix
-                + 'client_id=' + clientId
-                + '&response_type=token'
-                + '&scope=' + (scopes ? encodeURIComponent(scopes) : '')
-                + '&redirect_uri=' + encodeURIComponent(redirectUri);
-            console.log('Redirecting user to Spotify: ' + url);
-            window.location.replace(url);
-        }
-    }
-    else {
-        console.log('Access token is "' + accessToken + '".');
-    }
-};
-
 export const Spotify = {
+
+    getToken() { return accessToken },
+
+    authorize() {
+        const prefix = 'https://accounts.spotify.com/authorize?';
+        const url = prefix
+            + 'client_id=' + clientId
+            + '&response_type=token'
+            + '&scope=' + (scopes ? encodeURIComponent(scopes) : '')
+            + '&redirect_uri=' + encodeURIComponent(redirectUri);
+        console.log('Redirecting user to Spotify: ' + url);
+        window.location.replace(url);
+    },
+
+    setToken(token) {
+        accessToken = token;
+        headers = new Headers({
+            'Accept':        'application/json',
+            'Content-Type':  'application/json',
+            'Authorization': 'Bearer ' + token
+        });
+    },
+
     search(term) {
         let results = null;
         if (term) {
-            getToken();
             console.log("Searching for '" + term + "'.");
             let url = searchUrl + encodeURIComponent(term) + '&type=track&market=US';
             console.log('URL: "' + url + '"');
@@ -75,7 +63,6 @@ export const Spotify = {
 
     save(title, tracks) {
         let userId;
-        getToken();
         if (title) {
             if (tracks && tracks.length) {
                 console.log("Saving tracks to playlist '" + title + "'.");
