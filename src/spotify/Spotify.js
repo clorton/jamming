@@ -40,7 +40,7 @@ function getToken() {
 };
 
 export const Spotify = {
-    async search(term) {
+    search(term) {
         let results = null;
         if (term) {
             getToken();
@@ -48,7 +48,7 @@ export const Spotify = {
             let url = searchUrl + encodeURIComponent(term) + '&type=track&market=US';
             console.log('URL: "' + url + '"');
 
-            results = await fetch(url, { headers: headers })
+            results = fetch(url, { headers: headers })
             .then(response => {
                 if (response.ok) {
                     return response.json();
@@ -56,7 +56,8 @@ export const Spotify = {
                     console.log(response);
                     throw new Error('response not ok');
                 }
-            }).then(jsonResponse => {
+            })
+            .then(jsonResponse => {
                 console.log(jsonResponse);
                 return jsonResponse.tracks.items.map(item => {
                     return {
